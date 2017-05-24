@@ -36,7 +36,6 @@ const tokenizChinses = obj => {
       token['index'] = index
       return token
     })
-    // console.log('>>> tok', tokens);
   return tokens
 }
 
