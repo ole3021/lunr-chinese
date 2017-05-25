@@ -1,0 +1,32 @@
+{
+  "posts": [
+    {
+      "url": "url1",
+      "categories": [
+        "Hot",
+        "Coffee",
+        "Beverage"
+      ],
+      "title": "Blippar’s machine learning tech can identify cars better than you can",
+      "body": "Well, Blippar’s new machine learning technology is ready to take you on, as the augmented reality/visual search company is today announcing automotive recognition tech.In other words, Blippar’s AI can identify the make, model and year of any U.S. car made in 2000 or after, even if the car is moving under 15mph."
+    },
+    {
+      "url": "url2",
+      "categories": [
+        "Cold",
+        "Tea",
+        "Beverage"
+      ],
+      "title": "Pokémon launches Magikarp Jump, a new iOS and Android game",
+      "body": "There’s a new official mobile Pokémon game for iOS and Android devices, and it’s all about everyone’s favorite floppy fish: Magikarp. If you’re a longtime Pokémon fan, then you probably recall grinding with a Magikarp in your party to get it to level 20, whereupon (spoiler alert) it would blossom into a the powerful and awesome Gyarados."
+    },
+    {
+      "url": "url3",
+      "categories": [
+        "Cole"
+      ],
+      "title": "Sherif Marakby rejoins Ford to lead self-driving after leaving Uber",
+      "body": "After leaving his role at Uber as VP of Global Vehicle Programs in April, Sherif Marakby is back at Ford to lead its autonomous vehicles and electrifications program. Marakby’s new VP role was announced as part of a general executive re-organization revealed on Thursday under new Ford CEO Jim Hackett."
+    }
+  ]
+}
