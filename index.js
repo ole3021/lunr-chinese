@@ -1,10 +1,11 @@
 const lunr = require('lunr')
 const segment = require('nodejieba')
 
+const chineseRegx = /[\u4e00-\u9fa5]/
+const chineseTrimmerRegx = /[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]/g
+
 const containChinese = obj => {
   if (!obj) return []
-
-  const chineseRegx = /[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]/
 
   if (Array.isArray(obj)) {
     return obj.every(str => str.toString().trim().match(chineseRegx))
@@ -36,16 +37,26 @@ const tokenizChinses = obj => {
       token['index'] = index
       return token
     })
-    // console.log('>>> tok', tokens);
   return tokens
 }
 
+const trimmerChinese = token => {
+  return token.update(s => s.replace(chineseTrimmerRegx, ''))
+}
+
 lunr._tokenizer = lunr.tokenizer
+lunr._trimmer = lunr.trimmer
 
 lunr.tokenizer = function (obj) {
   if (containChinese(obj)) return tokenizChinses(obj)
 
   return lunr._tokenizer(obj)
+}
+
+lunr.trimmer = function (token) {
+  if (containChinese(token.str)) return trimmerChinese(token)
+
+  return lunr._tokenizer(token)
 }
 
 lunr.tokenizer.separator = lunr._tokenizer.separator
