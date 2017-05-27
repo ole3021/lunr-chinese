@@ -21,13 +21,16 @@ const tokenizChinses = obj => {
   return segment.cut(str, true)
 }
 
-lunr._tokenizer = lunr.tokenizer
 const registerLable = lunr.trimmer.label
+
 lunr.trimmer = token => {
   return token.replace(/^\s+/, '').replace(/\s+$/, '')
 }
-lunr.trimmer.label = registerLable
 
+lunr.trimmer.label = registerLable
+lunr.Pipeline.registerFunction(lunr.trimmer, 'trimmer')
+
+lunr._tokenizer = lunr.tokenizer
 
 lunr.tokenizer = obj => {
   if (!arguments.length || !obj) return []
@@ -36,16 +39,29 @@ lunr.tokenizer = obj => {
   return lunr._tokenizer(obj)
 }
 
+lunr.tokenizer.separator = lunr._tokenizer.separator
+lunr.tokenizer.load = lunr._tokenizer.load
+lunr.tokenizer.label = lunr._tokenizer.label
+lunr.tokenizer.registeredFunctions = lunr._tokenizer.registeredFunctions
+
 lunr.chineseIdx = (idx, data, path) => {
-  if (!Array.isArray(data)) return idx
+  if (data) {
+    if (!Array.isArray(data)) return idx
 
-  data.map(content => idx.add(content))
-  if (!path) return idx
+    data.map(content => idx.add(content))
 
-  fs.writeFile(path, JSON.stringify(idx), err => {
-    if (err) throw err
-  })
+    if (path) {
+      fs.writeFile(path, JSON.stringify(idx), err => {
+        if (err) throw err
+
+        console.log('>>> Generate Index complete!');
+      })
+    } else {
+      return idx
+    }
+  } else {
+    return lunr.Index.load(idx)
+  }
 }
 
-lunr.tokenizer.separator = lunr._tokenizer.separator
 module.exports = lunr
