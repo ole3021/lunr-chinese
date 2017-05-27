@@ -1,9 +1,10 @@
 {
   "name": "lunr-chinese",
-  "version": "0.1.1",
-  "description": "Lunr addon, do words segment with nodejieba locally.",
-  "main": "index.js",
+  "version": "0.1.2",
+  "description": "Lunr with chinese support, do words segment with nodejieba locally.",
+  "main": "lunr-chinese.js",
   "scripts": {
+    "build": "webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,5 +16,8 @@
   "dependencies": {
     "lunr": "0.7.2",
     "nodejieba": "^2.2.5"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
   }
 }
