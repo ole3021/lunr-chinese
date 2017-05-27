@@ -1,8 +1,8 @@
 const lunr = require('lunr')
 const segment = require('nodejieba')
+const fs = require('fs')
 
 const chineseRegx = /[\u4e00-\u9fa5]/
-const chineseTrimmerRegx = /[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]/g
 
 const containChinese = obj => {
   if (!obj) return []
@@ -15,50 +15,37 @@ const containChinese = obj => {
 }
 
 const tokenizChinses = obj => {
-  if (Array.isArray(obj)) {
-    return obj.map(t => new lunr.Token(lunr.utils.asString(t).toLowerCase()))
-  }
+  if (Array.isArray(obj)) return obj.map(t => lunr.utils.asString(t))
 
   const str = obj.toString().trim().toLowerCase()
-  const segmentWords = segment.cut(str, true)
-  let startIndex = 0
-
-  const segmentTokens = segmentWords.map(word => {
-    const token = new lunr.Token(word, {
-      position: [startIndex, word.length]
-    })
-    startIndex += word.length
-    return token
-  })
-
-  const tokens = segmentTokens
-    .filter(token => !token.str.match(lunr.tokenizer.separator))
-    .map((token, index) => {
-      token['index'] = index
-      return token
-    })
-  return tokens
-}
-
-const trimmerChinese = token => {
-  return token.update(s => s.replace(chineseTrimmerRegx, ''))
+  return segment.cut(str, true)
 }
 
 lunr._tokenizer = lunr.tokenizer
-lunr._trimmer = lunr.trimmer
+const registerLable = lunr.trimmer.label
+lunr.trimmer = token => {
+  return token.replace(/^\s+/, '').replace(/\s+$/, '')
+}
+lunr.trimmer.label = registerLable
 
-lunr.tokenizer = function (obj) {
+
+lunr.tokenizer = obj => {
+  if (!arguments.length || !obj) return []
   if (containChinese(obj)) return tokenizChinses(obj)
 
   return lunr._tokenizer(obj)
 }
 
-lunr.trimmer = function (token) {
-  if (containChinese(token.str)) return trimmerChinese(token)
+lunr.chineseIdx = (idx, data, path) => {
+  if (!Array.isArray(data)) return idx
 
-  return lunr._tokenizer(token)
+  data.map(content => idx.add(content))
+  if (!path) return idx
+
+  fs.writeFile(path, JSON.stringify(idx), err => {
+    if (err) throw err
+  })
 }
 
 lunr.tokenizer.separator = lunr._tokenizer.separator
-
 module.exports = lunr

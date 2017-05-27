@@ -13,7 +13,7 @@
   "author": "ole3021 (oliver.wang)",
   "license": "MIT",
   "dependencies": {
-    "lunr": "^2.0.4",
+    "lunr": "0.7.2",
     "nodejieba": "^2.2.5"
   }
 }
