@@ -21,13 +21,10 @@ const tokenizChinses = obj => {
   return segment.cut(str, true)
 }
 
-const registerLable = lunr.trimmer.label
-
 lunr.trimmer = token => {
   return token.replace(/^\s+/, '').replace(/\s+$/, '')
 }
 
-lunr.trimmer.label = registerLable
 lunr.Pipeline.registerFunction(lunr.trimmer, 'trimmer')
 
 lunr._tokenizer = lunr.tokenizer
