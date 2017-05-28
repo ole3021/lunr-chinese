@@ -18,6 +18,7 @@
     "nodejieba": "^2.2.5"
   },
   "devDependencies": {
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^2.6.1"
   }
 }

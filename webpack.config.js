@@ -1,8 +1,19 @@
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
 module.exports = {
-  entry: './build.js',
+  entry: {
+    "lunr-chinese": "./build.js",
+    "lunr-chinese.min": "./build.js",
+  },
   output: {
-    filename: 'lunr-chinese.js',
+    filename: '[name].js',
     library: 'lunr',
     libraryTarget: 'umd'
-  }
+  },
+  plugins: [
+    new UglifyJSPlugin({
+      test: /\.min\.js$/,
+      compress: true
+    })
+  ]
 }

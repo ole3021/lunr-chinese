@@ -1,6 +1,6 @@
 const lunr = require('lunr')
 
-lunr.trimmer = token => {
+lunr.trimmer = function(token) {
   return token.replace(/^\s+/, '').replace(/\s+$/, '')
 }
 

@@ -2165,13 +2165,11 @@ lunr.TokenStore.prototype.toJSON = function () {
 
 const lunr = __webpack_require__(0)
 
-lunr.trimmer = token => {
+lunr.trimmer = function(token) {
   return token.replace(/^\s+/, '').replace(/\s+$/, '')
 }
 
 lunr.Pipeline.registerFunction(lunr.trimmer, 'trimmer')
-
-console.log('>>> lunr', lunr.trimmer);
 
 module.exports = lunr
 
