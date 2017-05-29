@@ -41,7 +41,7 @@ lunr.tokenizer.load = lunr._tokenizer.load
 lunr.tokenizer.label = lunr._tokenizer.label
 lunr.tokenizer.registeredFunctions = lunr._tokenizer.registeredFunctions
 
-lunr.chineseIdx = (idx, data, path) => {
+lunr.init = (idx, data, path) => {
   if (data) {
     if (!Array.isArray(data)) return idx
 
@@ -51,7 +51,7 @@ lunr.chineseIdx = (idx, data, path) => {
       fs.writeFile(path, JSON.stringify(idx), err => {
         if (err) throw err
 
-        console.log('>>> Generate Index complete!');
+        console.log('>>> Generate Index complete!')
       })
     } else {
       return idx

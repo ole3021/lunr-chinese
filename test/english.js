@@ -55,7 +55,7 @@ const lunrData = tempData.map(data => {
 test('generate lunr index', t => {
   t.plan(11)
 
-  const lunrEnIdx = lunr.chineseIdx(idxConfig, lunrData)
+  const lunrEnIdx = lunr.init(idxConfig, lunrData)
 
   const testResult = lunrEnIdx.search('test')
   const JavaScriptResult = lunrEnIdx.search('JavaScript')
@@ -81,7 +81,7 @@ test.serial('generate chinese tokinzer index', t => {
   let err = null
 
   try {
-    lunr.chineseIdx(idxConfig, lunrData, generateIndexFile)
+    lunr.init(idxConfig, lunrData, generateIndexFile)
   } catch (e) {
     err = e
   }
@@ -119,6 +119,36 @@ test.serial.cb('read generated index file and use', t => {
   })
 })
 
+test.serial.cb('read generated index file with init', t => {
+  fs.readFile(generateIndexFile, (err, data) => {
+    t.plan(11)
+
+    if (err) throw err
+
+    const tokenizedSearchIndex = JSON.parse(data)
+
+    const lunrInit = lunrChinese.init(tokenizedSearchIndex)
+
+    const testResult = lunrInit.search('test')
+    const JavaScriptResult = lunrInit.search('JavaScript')
+    const javascriptResult = lunrInit.search('javascript')
+    const frameworkResult = lunrInit.search('framework')
+
+    t.is(testResult.length, 2)
+    t.is(testResult[0].ref, 1)
+    t.is(testResult[1].ref, 3)
+    t.is(JavaScriptResult.length, 2)
+    t.is(JavaScriptResult[0].ref, 2)
+    t.is(JavaScriptResult[1].ref, 1)
+    t.is(javascriptResult.length, 2)
+    t.is(javascriptResult[0].ref, 2)
+    t.is(javascriptResult[1].ref, 1)
+    t.is(frameworkResult.length, 1)
+    t.is(frameworkResult[0].ref, 2)
+    t.end()
+  })
+})
+
 test.serial.cb('read generated index file and use with min version', t => {
   fs.readFile(generateIndexFile, (err, data) => {
     t.plan(11)
@@ -133,6 +163,36 @@ test.serial.cb('read generated index file and use with min version', t => {
     const JavaScriptResult = lunrEnIdx.search('JavaScript')
     const javascriptResult = lunrEnIdx.search('javascript')
     const frameworkResult = lunrEnIdx.search('framework')
+
+    t.is(testResult.length, 2)
+    t.is(testResult[0].ref, 1)
+    t.is(testResult[1].ref, 3)
+    t.is(JavaScriptResult.length, 2)
+    t.is(JavaScriptResult[0].ref, 2)
+    t.is(JavaScriptResult[1].ref, 1)
+    t.is(javascriptResult.length, 2)
+    t.is(javascriptResult[0].ref, 2)
+    t.is(javascriptResult[1].ref, 1)
+    t.is(frameworkResult.length, 1)
+    t.is(frameworkResult[0].ref, 2)
+    t.end()
+  })
+})
+
+test.serial.cb('read generated index file init with min version', t => {
+  fs.readFile(generateIndexFile, (err, data) => {
+    t.plan(11)
+
+    if (err) throw err
+
+    const tokenizedSearchIndex = JSON.parse(data)
+
+    const lunrInit = lunrChineseMin.init(tokenizedSearchIndex)
+
+    const testResult = lunrInit.search('test')
+    const JavaScriptResult = lunrInit.search('JavaScript')
+    const javascriptResult = lunrInit.search('javascript')
+    const frameworkResult = lunrInit.search('framework')
 
     t.is(testResult.length, 2)
     t.is(testResult[0].ref, 1)
