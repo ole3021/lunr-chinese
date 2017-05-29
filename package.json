@@ -1,6 +1,6 @@
 {
   "name": "lunr-chinese",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lunr with chinese support, do words segment with nodejieba locally.",
   "main": "index.js",
   "scripts": {
